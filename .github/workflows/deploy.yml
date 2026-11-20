@@ -6,6 +6,8 @@ on:
     branches:
       - main
 
+  workflow_dispatch:
+
 permissions:
   contents: read
   pages: write
@@ -20,26 +22,50 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
+
+      # 1. descargar el repositorio y todas sus etiquetas
       - name: Descargar codigo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Verificar archivo HTML
-        run: |
-          if [ ! -f index.html ]; then
-            echo "ERROR: No existe index.html"
-            exit 1
-          fi
+      # 2. configurar Node.js
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
-          echo "Archivo index.html encontrado correctamente"
+      # 3. ejecutar pruebas de calidad
+      - name: Ejecutar pruebas de calidad
+        run: node tests/pruebas.js
 
+      # 4. guardar logs incluso cuando fallen las pruebas
+      - name: Guardar registros de calidad
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: registros-calidad
+          path: logs/*.txt
+          if-no-files-found: warn
+          retention-days: 30
+
+      # 5. configurar GitHub Pages
       - name: Configurar GitHub Pages
         uses: actions/configure-pages@v5
 
+      # 6. preparar archivos para despliegue
       - name: Preparar archivos
+        run: |
+          mkdir public
+          cp index.html public/index.html
+
+      # 7. crear artefacto de publicacion
+      - name: Subir archivos de publicacion
         uses: actions/upload-pages-artifact@v4
         with:
-          path: '.'
+          path: public
 
+      # 8. desplegar si las pruebas fueron exitosas
       - name: Desplegar aplicacion
         id: deployment
         uses: actions/deploy-pages@v4

@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica CI/CD</title>
+</head>
+<body>
+
+    <h1>Mi primera práctica CI/CD</h1>
+
+    <p>Versión inicial del proyecto.</p>
+
+    <h2>Generador de números aleatorios</h2>
+
+    <p id="resultado">Presiona el botón para generar un número.</p>
+
+    <button onclick="mostrarNumero()">
+        Generar número
+    </button>
+
+    <script>
+        // FUNCION CRITICA DE LA APLICACION
+        function calcularNumeroAleatorio(min, max) {
+
+            if (!Number.isInteger(min) || !Number.isInteger(max)) {
+                throw new TypeError("Los valores deben ser enteros");
+            }
+
+            if (min > max) {
+                throw new RangeError("El minimo no puede ser mayor al maximo");
+            }
+
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        // funcion para mostrar el resultado en pantalla
+        function mostrarNumero() {
+
+            const numero = calcularNumeroAleatorio(1, 100);
+
+            document.getElementById("resultado").textContent =
+                "Numero generado: " + numero;
+        }
+    </script>
+
+</body>
+</html>

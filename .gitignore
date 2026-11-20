@@ -1,0 +1,5 @@
+# ignorar archivos TXT de logs
+logs/*.txt
+
+# mantener la carpeta logs en Git
+!logs/.gitkeep

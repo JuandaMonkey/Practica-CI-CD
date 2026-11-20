@@ -22,30 +22,7 @@
         Generar número
     </button>
 
-    <script>
-        // FUNCION CRITICA DE LA APLICACION
-        function calcularNumeroAleatorio(min, max) {
-
-            if (!Number.isInteger(min) || !Number.isInteger(max)) {
-                throw new TypeError("Los valores deben ser enteros");
-            }
-
-            if (min > max) {
-                throw new RangeError("El minimo no puede ser mayor al maximo");
-            }
-
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
-
-        // funcion para mostrar el resultado en pantalla
-        function mostrarNumero() {
-
-            const numero = calcularNumeroAleatorio(1, 100);
-
-            document.getElementById("resultado").textContent =
-                "Numero generado: " + numero;
-        }
-    </script>
+    
 
 </body>
 </html>
